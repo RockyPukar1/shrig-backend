@@ -89,6 +89,7 @@ export class OrderController {
           message: "Search term is required",
           timestamp: new Date().toISOString(),
         };
+        console.log(response);
         res.status(400).json(response);
         return;
       }
@@ -148,6 +149,7 @@ export class OrderController {
       res.status(201).json(response);
       return;
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

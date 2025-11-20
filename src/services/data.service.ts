@@ -118,11 +118,7 @@ export class DataService {
 
   private validateDataPoints(dataPoints: DataPoint[]): void {
     for (const point of dataPoints) {
-      if (
-        !point.type ||
-        typeof point.value !== "string" ||
-        typeof point.value !== "string"
-      ) {
+      if (!point.type || typeof point.type !== "string") {
         throw new Error(
           "Invalid data point: type is required and must be a string"
         );

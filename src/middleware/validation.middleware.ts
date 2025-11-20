@@ -1,4 +1,5 @@
 import { ApiResponse } from "@/types";
+import { OrderStatus } from "@/types/order.types";
 import { Request, Response, NextFunction } from "express";
 import Joi from "joi";
 
@@ -8,6 +9,9 @@ const orderSchema = Joi.object({
   product_name: Joi.string().min(1).max(255).required(),
   quantity: Joi.number().integer().min(1).required(),
   price: Joi.number().positive().required(),
+  status: Joi.string()
+    .valid(...Object.values(OrderStatus))
+    .optional(),
 });
 
 const batchOrderSchema = Joi.array().items(orderSchema).min(1).max(1000);
@@ -25,6 +29,7 @@ const dataIngestionSchema = Joi.alternatives().try(
 );
 
 const paginationSchema = Joi.object({
+  q: Joi.string().optional(),
   page: Joi.number().integer().min(1).optional(),
   limit: Joi.number().integer().min(1).max(1000).optional(),
   sortBy: Joi.string().optional(),
