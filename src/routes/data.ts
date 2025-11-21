@@ -7,10 +7,10 @@ const router = Router();
 
 router.post("/ingest", validateDataIngestion, dataController.ingestData);
 
-router.get("/stats", cacheMiddleware(30), dataController.getDataStats);
+router.get("/stats", dataController.getDataStats);
 
-router.get("/history", cacheMiddleware(120), dataController.getDataHistory);
+router.get("/history", dataController.getDataHistory);
 
-router.get("/aggregate", cacheMiddleware(300), dataController.aggregateData);
+router.get("/aggregate", dataController.aggregateData);
 
 export default router;

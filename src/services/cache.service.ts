@@ -62,6 +62,7 @@ export class CacheService {
   }
 
   // Multi-level caching: Memory + Redis
+  // The reason behind using this strategy is memory is faster than redis and redis is faster than database.
   private memoryCache = new Map<string, { data: any; expiry: number }>();
 
   async getMultiLevel<T>(key: string): Promise<T | null> {

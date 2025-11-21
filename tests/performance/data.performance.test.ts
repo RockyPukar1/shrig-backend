@@ -99,7 +99,7 @@ describe("Real-time Data Processing Tests", () => {
     it.skip("should receive real-time updates when data is processed", (done) => {
       const timeout = setTimeout(() => {
         done(new Error("Test timed out - WebSocket connection failed"));
-      }, 5000); // 5 second timeout
+      }, 5000);
 
       clientSocket.on("connect", () => {
         console.log("WebSocket connected");
@@ -111,21 +111,19 @@ describe("Real-time Data Processing Tests", () => {
           if (data.success) {
             console.log("WebSocket authenticated");
 
-            // Listen for any data update
             clientSocket.on("data_update", (update) => {
               clearTimeout(timeout);
               expect(update).toBeDefined();
-              console.log("✓ Test Case 2: Real-time update received");
+              console.log("Test Case 2: Real-time update received");
               done();
             });
 
-            // Send data to trigger update (don't wait for response)
             setTimeout(() => {
               const dataPoints = generateDataPoints(2);
               request(app)
                 .post("/api/v1/data/ingest")
                 .send(dataPoints)
-                .end(() => {}); // Fire and forget
+                .end(() => {});
             }, 500);
           } else {
             clearTimeout(timeout);
@@ -133,7 +131,6 @@ describe("Real-time Data Processing Tests", () => {
           }
         });
 
-        // Handle authentication timeout
         setTimeout(() => {
           if (!clientSocket.disconnected) {
             clearTimeout(timeout);
@@ -146,12 +143,12 @@ describe("Real-time Data Processing Tests", () => {
         clearTimeout(timeout);
         done(new Error(`Connection error: ${error.message}`));
       });
-    }, 10000); // Increase test timeout to 10 seconds
+    }, 10000);
   });
 
   describe("Test Case 3: Multiple WebSocket Connections", () => {
     it.skip("should broadcast updates to all connected clients", (done) => {
-      const clientCount = 3; // Reduce from 5 to 3 for faster testing
+      const clientCount = 3;
       const clients: Socket[] = [];
       let connectedCount = 0;
       let receivedCount = 0;
@@ -161,7 +158,6 @@ describe("Real-time Data Processing Tests", () => {
         done(new Error("Test timed out - not all clients received updates"));
       }, 10000);
 
-      // Create multiple clients
       for (let i = 0; i < clientCount; i++) {
         const client = Client(`http://localhost:${serverPort}`);
         clients.push(client);
@@ -178,12 +174,11 @@ describe("Real-time Data Processing Tests", () => {
                   `Client ${i} received update (${receivedCount}/${clientCount})`
                 );
 
-                // All clients received the update
                 if (receivedCount === clientCount) {
                   clearTimeout(timeout);
                   clients.forEach((c) => c.disconnect());
                   console.log(
-                    "✓ Test Case 3: All clients received broadcast updates"
+                    "Test Case 3: All clients received broadcast updates"
                   );
                   done();
                 }
@@ -199,7 +194,6 @@ describe("Real-time Data Processing Tests", () => {
         });
       }
 
-      // Wait for all clients to connect, then send data
       const checkConnections = setInterval(() => {
         if (connectedCount === clientCount) {
           clearInterval(checkConnections);
@@ -215,11 +209,10 @@ describe("Real-time Data Processing Tests", () => {
         }
       }, 100);
 
-      // Cleanup interval if test times out
       setTimeout(() => {
         clearInterval(checkConnections);
       }, 8000);
-    }, 15000); // Increase timeout to 15 seconds
+    }, 15000);
   });
 
   describe("Test Case 4: Job Queue Processing", () => {

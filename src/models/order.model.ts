@@ -62,10 +62,10 @@ const OrderSchema = new Schema(
   }
 );
 
-OrderSchema.index({ status: 1, created_at: -1 });
-OrderSchema.index({ customer_email: 1, created_at: -1 });
-OrderSchema.index({ created_at: -1 });
-OrderSchema.index({ total_amount: -1 });
+OrderSchema.index({ status: 1, created_at: -1 }); // Get recent orders by status
+OrderSchema.index({ customer_email: 1, created_at: -1 }); // Get recent orders by customer email
+OrderSchema.index({ created_at: -1 }); // Get recent orders
+OrderSchema.index({ total_amount: -1 }); // Get orders by total amount
 
 OrderSchema.index(
   {
@@ -83,8 +83,8 @@ OrderSchema.index(
   }
 );
 
-OrderSchema.index({ status: 1, total_amount: 1 });
-OrderSchema.index({ created_at: 1, status: 1 });
+OrderSchema.index({ status: 1, total_amount: 1 }); // Get orders by status and total amount
+OrderSchema.index({ created_at: 1, status: 1 }); // Get orders by created date and status
 
 OrderSchema.pre("save", function (next) {
   if (this.isModified("quantity") || this.isModified("price")) {
