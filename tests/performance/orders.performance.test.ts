@@ -72,7 +72,7 @@ describe("High-Performance API Tests", () => {
   });
 
   describe("Test Case 4: Batch Insert Performance", () => {
-    it.skip("should efficiently create 100 orders using batch insert", async () => {
+    it("should efficiently create 100 orders using batch insert", async () => {
       const batchOrders = generateBatchOrders(100);
       const startTime = Date.now();
 
